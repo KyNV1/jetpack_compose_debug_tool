@@ -14,10 +14,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import kotlin.math.sqrt
 
-// Ngưỡng gia tốc để xác định một cú lắc
-private const val SHAKE_THRESHOLD_GRAVITY = 2.7F
-// Thời gian tối thiểu giữa hai lần phát hiện lắc (tính bằng mili giây)
-private const val SHAKE_COOLDOWN_MS = 500
 
 @Composable
 fun ShakeDetector(onShake: () -> Unit) {
@@ -25,38 +21,40 @@ fun ShakeDetector(onShake: () -> Unit) {
     val sensorManager = remember {
         context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
-    val accelerometer = remember {
-        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-    }
-    var lastShakeTime by remember { mutableStateOf(0L) }
 
     DisposableEffect(Unit) {
-        val sensorEventListener = object : SensorEventListener {
+        var acceleration = 10f
+        var currentAcceleration = SensorManager.GRAVITY_EARTH
+        var lastAcceleration = SensorManager.GRAVITY_EARTH
+
+        val sensorListener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent?) {
-                if (event == null) return
+                if(event==null) return
                 val x = event.values[0]
                 val y = event.values[1]
                 val z = event.values[2]
-                val gForce = sqrt(x * x + y * y + z * z) / SensorManager.GRAVITY_EARTH
-                if (gForce > SHAKE_THRESHOLD_GRAVITY) {
-                    val now = System.currentTimeMillis()
-                    if (now - lastShakeTime > SHAKE_COOLDOWN_MS) {
-                        lastShakeTime = now
-                        onShake()
-                    }
+                lastAcceleration = currentAcceleration
+                currentAcceleration = sqrt(x * x + y * y + z * z).toDouble().toFloat()
+                val delta = currentAcceleration - lastAcceleration
+                acceleration = acceleration * 0.9F + delta
+                if(acceleration>12){
+                    onShake()
                 }
             }
-            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+            }
+
         }
 
         sensorManager.registerListener(
-            sensorEventListener,
-            accelerometer,
-            SensorManager.SENSOR_DELAY_UI
+            sensorListener,
+            sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+            SensorManager.SENSOR_DELAY_NORMAL
         )
 
         onDispose {
-            sensorManager.unregisterListener(sensorEventListener)
+            sensorManager.unregisterListener(sensorListener)
         }
     }
 }

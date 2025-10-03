@@ -29,6 +29,7 @@ class MainActivity : ComponentActivity() {
                     MainAppContent()
 
                     // CHỈ KÍCH HOẠT DEBUG TOOL TRONG MÔI TRƯỜNG DEBUG
+
                     // Code này sẽ bị loại bỏ hoàn toàn trong bản build release
                     if (BuildConfig.DEBUG) {
                         DebugSheetManager()
