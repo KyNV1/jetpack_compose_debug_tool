@@ -5,6 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -44,6 +45,7 @@ fun ShakeDetector(onShake: () -> Unit) {
 
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
             }
+            
 
         }
 
@@ -54,6 +56,7 @@ fun ShakeDetector(onShake: () -> Unit) {
         )
 
         onDispose {
+            Log.d("frank", "ShakeDetector: ")
             sensorManager.unregisterListener(sensorListener)
         }
     }

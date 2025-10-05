@@ -1,6 +1,7 @@
 package com.example.jetpack_compose_debug_tool
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.jetpack_compose_debug_tool.debug.DebugSheetManager
+import com.example.jetpack_compose_debug_tool.scroll.SimpleScrollView
 import com.example.jetpack_compose_debug_tool.ui.theme.Jetpack_compose_debug_toolTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,6 +39,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("frank", "onDestroy: ")
     }
 }
 
