@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.jetpack_compose_debug_tool.debug.DebugSheetManager
+import com.example.jetpack_compose_debug_tool.scroll.DebugView
 import com.example.jetpack_compose_debug_tool.scroll.SimpleScrollView
 import com.example.jetpack_compose_debug_tool.ui.theme.Jetpack_compose_debug_toolTheme
 
@@ -24,18 +25,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Jetpack_compose_debug_toolTheme {
-
-                // Box đóng vai trò là container cho cả app và debug tool
                 Box(modifier = Modifier.fillMaxSize().padding()) {
-                    // Hiển thị giao diện chính của ứng dụng
                     MainAppContent()
-
-                    // CHỈ KÍCH HOẠT DEBUG TOOL TRONG MÔI TRƯỜNG DEBUG
-
-                    // Code này sẽ bị loại bỏ hoàn toàn trong bản build release
                     if (BuildConfig.DEBUG) {
                         DebugSheetManager()
                     }
+
                 }
             }
         }

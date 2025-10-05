@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.example.jetpack_compose_debug_tool.scroll.DebugView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,7 +25,7 @@ fun DebugSheetManager() {
             onDismissRequest = { showSheet = false },
             sheetState = sheetState,
         ) {
-            DebugModalBottomSheet()
+            DebugView()
         }
     }
 }
